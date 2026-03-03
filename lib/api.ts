@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { NewNote, Note, NoteTag } from '../types/note';
+import type { NewNote, Note } from '../types/note';
 interface AxiosNotesResponse {
   notes: Note[];
   totalPages: number;
