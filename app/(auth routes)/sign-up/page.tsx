@@ -1,28 +1,37 @@
 'use client';
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import css from './SignUpPage.module.css';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { register, RegisterRequest } from '@/lib/api/clientApi';
+import { register, UserRequest } from '@/lib/api/clientApi';
+import { ApiError } from '@/types/note';
+import { useAuthStore } from '@/lib/store/authStore';
 
 export default function SignUpPage() {
+  const [error, setError] = useState('');
+  const setUser = useAuthStore(state => state.setUser);
   const signUpId = useId();
-  const queryClient = useQueryClient();
   const router = useRouter();
-  const createUser = useMutation({
-    mutationFn: register,
-    onSuccess: async () => {
-      (await queryClient.invalidateQueries({ queryKey: ['user'] }),
-        router.push('/profile'));
-    },
-  });
   const handleRegisterSubmit = async (formData: FormData) => {
-    const userData: RegisterRequest = {
-      email: String(formData.get('email')),
-      password: String(formData.get('pasword')),
-    };
-    createUser.mutate(userData);
-    router.push('/profile');
+    try {
+      const userData: UserRequest = {
+        email: String(formData.get('email')),
+        password: String(formData.get('pasword')),
+      };
+      const user = await register(userData);
+      if (user) {
+        setUser(user);
+        router.push('/profile');
+      } else {
+        setError('Invalid email or password');
+      }
+    } catch (error) {
+      setError(
+        (error as ApiError).response?.data?.error ??
+          (error as ApiError).message ??
+          'Oops... some error'
+      );
+    }
   };
   return (
     <main className={css.mainContent}>
@@ -53,7 +62,7 @@ export default function SignUpPage() {
             Register
           </button>
         </div>
-        <p className={css.error}>Error</p>
+        <p className={css.error}>{error}</p>
       </form>
     </main>
   );

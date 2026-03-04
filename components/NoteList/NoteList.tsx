@@ -1,10 +1,10 @@
-"use client";
-import type { Note } from "../../types/note";
-import css from "./NoteList.module.css";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteNote } from "../../lib/api";
-import toast from "react-hot-toast";
-import Link from "next/link";
+'use client';
+import type { Note } from '../../types/note';
+import css from './NoteList.module.css';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteNote } from '../../lib/api/clientApi';
+import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 interface NoteListProps {
   notes: Note[];
@@ -18,7 +18,7 @@ export default function NoteList({ notes }: NoteListProps) {
       queryClient.invalidateQueries();
     },
     onError() {
-      toast.error("Sorry! Something went wrong!!!");
+      toast.error('Sorry! Something went wrong!!!');
     },
   });
   return (

@@ -1,52 +1,51 @@
 import Link from 'next/link';
 import css from './ProfilePage.module.css';
 import { Metadata } from 'next';
-interface ProfileProps {
-  params: Promise<{ id: string }>;
-}
-export async function generateMetadata({params}: ProfileProps): Promise<Metadata> {
- 
+import { getMe } from '@/lib/api/serverApi';
+export async function generateMetadata(): Promise<Metadata> {
+  const user = await getMe();
   return {
-    // title: `Info about: ${user.title}`,
-    // description: `${note.content}`,
-    // openGraph: {
-    // type: 'website',
-    // url: `http://localhost:3000/notes/${id}`,
-    // title:  `Info about: ${note.title}`,
-    // description: `${note.content}`,
-    // images:[
-    //   {
-    //     url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
-    //     width: 600,
-    //     height:300,
-    //     alt: 'Notehub main logo',
-    //   }
-    // ],
-  // }
-  }
+    title: `Info about: ${user.username}`,
+    description: `${user.avatar}`,
+    openGraph: {
+      type: 'website',
+      url: `http://localhost:3000/profile`,
+      title: `Info about: ${user.username}`,
+      description: `${user.avatar}`,
+      images: [
+        {
+          url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+          width: 600,
+          height: 300,
+          alt: 'Notehub main logo',
+        },
+      ],
+    },
+  };
 }
-export default function Profile() {
+export default async function Profile() {
+  const user = await getMe();
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
         <div className={css.header}>
           <h1 className={css.formTitle}>Profile Page</h1>
-          <Link href="" className={css.editProfileButton}>
+          <Link href="/profile/edit" className={css.editProfileButton}>
             Edit Profile
           </Link>
         </div>
         <div className={css.avatarWrapper}>
           <img
-            src="Avatar"
-            alt="User Avatar"
+            src={user.avatar}
+            alt={user.username}
             width={120}
             height={120}
             className={css.avatar}
           />
         </div>
         <div className={css.profileInfo}>
-          <p>Username: your_username</p>
-          <p>Email: your_email@example.com</p>
+          <p>{`Username: ${user.username}`}</p>
+          <p>{`Email: ${user.email}`}</p>
         </div>
       </div>
     </main>
