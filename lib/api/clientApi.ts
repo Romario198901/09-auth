@@ -1,15 +1,15 @@
-import axios from 'axios';
-import type { NewNote, Note } from '../types/note';
+import { nextServer } from "./api";
+import type { NewNote, Note } from '../../types/note';
+import { User } from "@/types/user";
 interface AxiosNotesResponse {
   notes: Note[];
   totalPages: number;
 }
+ export interface RegisterRequest {
+    email: string;
+    password: string;
+}
 const ITEMS_PER_PAGE = 12;
-const baseURL = process.env.NEXT_PUBLIC_API_URL+'/api';
-export const nextServer = axios.create({
-  baseURL: baseURL,
- 
-});
 export const fetchNotes = async (
   query: string,
   page: number,
@@ -37,3 +37,7 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
   const response = await nextServer.get<Note>(`/notes/${id}`);
   return response.data;
 };
+export const register = async(userData: RegisterRequest): Promise<User> => {
+    const {data} = await nextServer.post<User>('/auth/register', userData);
+    return data;
+}
