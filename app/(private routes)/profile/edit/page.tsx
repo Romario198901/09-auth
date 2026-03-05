@@ -11,9 +11,12 @@ import { User } from '@/types/user';
 export default  function EditProfilePage() {
   const editProfileId = useId();
   const [error, setError] = useState('');
-  const user = useAuthStore(state => state.user) as User;
+  const user = useAuthStore(state => state.user);
   const setUser = useAuthStore(state => state.setUser);
   const router = useRouter();
+  if(!user) {
+    return null;
+  }
   const handleEditSubmit = async (formData: FormData) => {
     try {
       const username = formData.get('username') as string;
