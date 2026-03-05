@@ -16,7 +16,7 @@ export default function SignInPage() {
     try {
       const userData: UserRequest = {
         email: String(formData.get('email')),
-        password: String(formData.get('password')),
+        password: String(formData.get('pasword')),
       };
       const user = await login(userData);
       if (user) {
@@ -35,6 +35,7 @@ export default function SignInPage() {
   };
   return (
     <main className={css.mainContent}>
+      
       <form className={css.form} action={handleLoginSubmit}>
         <h1 className={css.formTitle}>Sign in</h1>
 
