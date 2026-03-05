@@ -2,7 +2,6 @@
 import { useId, useState } from 'react';
 import css from './SignUpPage.module.css';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { register, UserRequest } from '@/lib/api/clientApi';
 import { ApiError } from '@/types/note';
 import { useAuthStore } from '@/lib/store/authStore';
