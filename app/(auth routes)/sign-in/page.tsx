@@ -16,7 +16,7 @@ export default function SignInPage() {
     try {
       const userData: UserRequest = {
         email: String(formData.get('email')),
-        password: String(formData.get('pasword')),
+        password: String(formData.get('password')),
       };
       const user = await login(userData);
       if (user) {

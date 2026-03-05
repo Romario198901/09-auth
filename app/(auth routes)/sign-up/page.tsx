@@ -15,7 +15,7 @@ export default function SignUpPage() {
     try {
       const userData: UserRequest = {
         email: String(formData.get('email')),
-        password: String(formData.get('pasword')),
+        password: String(formData.get('password')),
       };
       const user = await register(userData);
       if (user) {
